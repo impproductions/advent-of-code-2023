@@ -15,17 +15,12 @@ def find_centers(rows):
     candidates = [ri for ri in range(len(rows) - 1) if rows[ri] == rows[ri + 1]]
     centers = []
 
-    # print("find centers for", rows)
-
     for candidate in candidates:
         i = 0
         is_valid = True
         while True:
             if candidate - i < 0 or candidate + i + 1 >= len(rows):
                 break
-            # print("comparing for candidate", candidate)
-            # print(rows[candidate - i])
-            # print(rows[candidate + i + 1])
             if rows[candidate - i] != rows[candidate + i + 1]:
                 is_valid = False
                 break
@@ -50,9 +45,6 @@ def part1():
 
     row_centers = [find_centers(m) for m in rows]
     col_centers = [find_centers(m) for m in cols]
-    print(row_centers)
-    print(col_centers)
-    # pprint(([c for c in row_centers if c], [c for c in col_centers if c]))
 
     totals = sum([sum([c + 1 for c in centers]) for centers in col_centers])
     totals += sum([sum([c + 1 for c in centers]) for centers in row_centers]) * 100
@@ -79,13 +71,6 @@ def find_centers2(rows):
     ]
     centers = []
 
-    print("find centers for")
-    pprint(rows)
-    
-    print("candidates:")
-    pprint(candidates)
-
-
     for candidate in candidates:
         i = 0
         is_valid = True
@@ -93,10 +78,6 @@ def find_centers2(rows):
         while True:
             if candidate - i < 0 or candidate + i + 1 >= len(rows):
                 break
-            print("comparing for candidate", candidate)
-            print(candidate - i, rows[candidate - i])
-            print(candidate + i + 1, rows[candidate + i + 1])
-            print("result", compare_rows(rows[candidate - i], rows[candidate + i + 1]), "valid", is_valid, "cleaned", has_cleaned)
             if not compare_rows(rows[candidate - i], rows[candidate + i + 1]):
                 is_valid = False
                 break
@@ -129,37 +110,8 @@ def part2():
     og_row_centers = [set(find_centers(m)) for m in rows]
     og_col_centers = [set(find_centers(m)) for m in cols]
 
-    # for mi, m in enumerate(rows):
-    #     row_candidates = {
-    #         (i, j): (r1, r2)
-    #         for i, r1 in enumerate(m)
-    #         for j, r2 in enumerate(m)
-    #         if i != j and compare_rows(r1, r2)
-    #     }
-    #     row_candidates = {
-    #         tuple(sorted((i, j)))
-    #         for i, r1 in enumerate(m)
-    #         for j, r2 in enumerate(m)
-    #         if i != j and abs((i - j) % 2 != 0) and compare_rows(r1, r2)
-    #     }
-    #     # row_candidates = {math.floor((b - a) / 2) for a, b in row_candidates}
-
-    #     print(mi, row_candidates)
     row_centers = [find_centers2(m) - og_row_centers[i] for i, m in enumerate(rows)]
     col_centers = [find_centers2(m) - og_col_centers[i] for i, m in enumerate(cols)]
-
-    for i, cs in enumerate(col_centers):
-        # if len(cs) > 1:
-        #     for c in cs:
-        #         pprint(cols[i])
-        print("cols", i, cs, "og", og_col_centers[i])
-    for i, cs in enumerate(row_centers):
-        # if len(cs) > 1:
-        #     for c in cs:
-        #         pprint(rows[i])
-        print("rows", i, cs, "og", og_row_centers[i])
-    print(row_centers)
-    print(col_centers)
 
     totals = sum(
         [sum([c + 1 for c in centers]) for i, centers in enumerate(col_centers)]
